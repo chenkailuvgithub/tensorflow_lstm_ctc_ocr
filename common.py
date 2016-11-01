@@ -49,7 +49,7 @@ OUTPUT_SHAPE = (64, 256)
 #DIGITS = "0123456789GHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
 #DIGITS = "0123456789GHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz.,;'!@$%^&()[]{}-+=" #file name supported
 #DIGITS = "0123456789GHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz`~!@#$%^&*()_+-=[];',./{}|:\"<>?\\" #all
-DIGITS = "0123456789GHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz`~!@#$%&*()_+-=;',/:?" #url
+DIGITS = "0123456789GHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz`~!@#%$&*()_+-=;',/:?." #url
 # LETTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
 

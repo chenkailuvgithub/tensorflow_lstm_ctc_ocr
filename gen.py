@@ -199,11 +199,12 @@ def rounded_rect(shape, radius):
 
 
 def generate_plate(font_height, char_ims):
-    h_padding = random.uniform(0, 0.4) * font_height
-    v_padding = random.uniform(0, 0.3) * font_height
+    h_padding = random.uniform(0, 0.1) * font_height
+    v_padding = random.uniform(0, 0.1) * font_height
     spacing = font_height * random.uniform(0.0, 0.05)
     radius = 1 + int(font_height * 0.1 * random.random())
     code = generate_code()
+    #code = "https://www.baidu.com"
     text_width = sum(char_ims[c].shape[1] for c in code)
     text_width += (len(code) - 1) * spacing
 
@@ -226,7 +227,7 @@ def generate_plate(font_height, char_ims):
     plate = (  # numpy.ones(out_shape) * plate_color * (1. - text_mask) +
         # numpy.ones(out_shape) *
         text_color * text_mask)
-    plate_resize = cv2.resize(plate, ((int)(random.uniform(0.8, 1.2)*plate.shape[1]), (int)(random.uniform(0.8, 1.2)*plate.shape[0])))
+    plate_resize = cv2.resize(plate, ((int)(random.uniform(0.8, 1.2)*plate.shape[1]), (int)(random.uniform(0.8, 2.5)*plate.shape[0])))
     # print "fffff", plate.shape
     # plate.resize([plate.shape[0] + 3, plate.shape[1]+1 ])
     # cv2.imwrite("test/fff.png", plate * 255)
@@ -302,7 +303,7 @@ def generate_ims(num_images):
 #if __name__ == "__main__":
 def gen_all():
     dirs = ["test", "train"]
-    size = {"test": common.TEST_SIZE, "train": common.TRAIN_SIZE}
+    size = {"test": common.TEST_SIZE, "train": common.BATCH_SIZE*common.BATCHES}
     for dir_name in dirs:
 	labels = {}
         if not os.path.exists(dir_name):
