@@ -79,7 +79,7 @@ def get_train_model():
     # batch_size and max_stepsize can vary along each step
     #features = convolutional_layers()
     #print features.get_shape()
-    inputs = tf.placeholder(tf.float32, [None, None, common.OUTPUT_SHAPE[0]])
+    inputs = tf.placeholder(tf.float32, [None, None, common.OUTPUT_SHAPE[0]], name="input_node")
 
     # Here we use sparse_placeholder that will generate a
     # SparseTensor required by ctc_loss op.
@@ -124,6 +124,6 @@ def get_train_model():
     logits = tf.reshape(logits, [batch_s, -1, common.num_classes])
 
     # Time major
-    logits = tf.transpose(logits, (1, 0, 2))
+    logits = tf.transpose(logits, (1, 0, 2), name='output_node')
 
     return logits, inputs, targets, seq_len, W, b
