@@ -48,9 +48,9 @@ import cPickle as pickle
 import common
 from common import OUTPUT_SHAPE
 
-fonts = [ "fonts/Arial.ttf", "fonts/times.ttf", "fonts/msyh.ttf"]
+fonts = [ "fonts/Arial.ttf", "fonts/msyh.ttf"]
 # fonts = ["fonts/Farrington-7B-Qiqi.ttf","fonts/times.ttf"]
-FONT_HEIGHT = 32  # Pixel size to which the chars are resized
+FONT_HEIGHT = 35  # Pixel size to which the chars are resized
 
 CHARS = common.CHARS + " "
 
@@ -149,7 +149,7 @@ def make_affine_transform(from_shape, to_shape,
 
     # Set the scale as large as possible such that the skewed and scaled shape
     # is less than or equal to the desired ratio in either dimension.
-    scale *= numpy.min(to_size / skewed_size) * 1.1
+    #scale *= numpy.min(to_size / skewed_size) * 1.1
 
     # Set the translation such that the skewed and scaled image falls within
     # the output shape's bounds.
@@ -171,7 +171,7 @@ def make_affine_transform(from_shape, to_shape,
 def generate_code():
     f = ""
     append_blank = random.choice([True, False])
-    length = random.choice(range(1,21))
+    length = random.choice(range(1,12))
     blank = ''
     if common.ADD_BLANK:
         blank = ' '
@@ -199,7 +199,7 @@ def rounded_rect(shape, radius):
 
 
 def generate_plate(font_height, char_ims):
-    h_padding = random.uniform(0, 0.1) * font_height
+    h_padding = random.choice(range(0, 3))
     v_padding = random.uniform(0, 0.1) * font_height
     spacing = font_height * random.uniform(0.0, 0.05)
     radius = 1 + int(font_height * 0.1 * random.random())
@@ -227,11 +227,11 @@ def generate_plate(font_height, char_ims):
     plate = (  # numpy.ones(out_shape) * plate_color * (1. - text_mask) +
         # numpy.ones(out_shape) *
         text_color * text_mask)
-    plate_resize = cv2.resize(plate, ((int)(random.uniform(0.8, 1.2)*plate.shape[1]), (int)(random.uniform(0.8, 2.5)*plate.shape[0])))
+    # plate_resize = cv2.resize(plate, ((int)(random.uniform(0.8, 1.2)*plate.shape[1]), (int)(random.uniform(0.8, 2.5)*plate.shape[0])))
     # print "fffff", plate.shape
     # plate.resize([plate.shape[0] + 3, plate.shape[1]+1 ])
     # cv2.imwrite("test/fff.png", plate * 255)
-    return plate_resize, rounded_rect(out_shape, radius), code  # means blank
+    return plate, rounded_rect(out_shape, radius), code  # means blank
 
 
 def generate_bg(bg_ims):
@@ -262,13 +262,13 @@ def generate_im(char_ims, bg_ims):
     M, out_of_bounds = make_affine_transform(
         from_shape=plate.shape,
         to_shape=bg.shape,
-        min_scale=0.7,
-        max_scale=0.9,
-        rotation_variation=0.20,
-        scale_variation=1.0,
-        translation_variation=1.0)
+        min_scale=1.0,
+        max_scale=1.0,
+        rotation_variation=0,
+        scale_variation=0,
+        translation_variation=0)
     plate = cv2.warpAffine(plate, M, (bg.shape[1], bg.shape[0]))
-    plate_mask = cv2.warpAffine(plate_mask, M, (bg.shape[1], bg.shape[0]))
+    #plate_mask = cv2.warpAffine(plate_mask, M, (bg.shape[1], bg.shape[0]))
     # plate_mask = cv2.warpAffine(plate_mask, M, (bg.shape[1], bg.shape[0]))
     #plate_resize = cv2.resize(plate, ((int)(random.uniform(0.8, 1.2)*plate.shape[1]), (int)(random.uniform(0.8, 1.2)*plate.shape[0])))
     
@@ -276,10 +276,12 @@ def generate_im(char_ims, bg_ims):
     # out = plate * plate_mask + bg * (1 - plate_mask)
     out = plate + bg
     # out = plate
-    out = cv2.resize(out, (OUTPUT_SHAPE[1], OUTPUT_SHAPE[0]))
+    #out = cv2.resize(out, (OUTPUT_SHAPE[1], OUTPUT_SHAPE[0]))
 
     # out += numpy.random.normal(scale=0.05, size=out.shape)
     out = numpy.clip(out, 0., 1.)
+    #out = cv2.cvtColor(out*255., cv2.COLOR_BGR2GRAY)
+    #cv2.threshold(out, out, 127, 255, cv2.THRESH_BINARY_INV);
     return out, code, not out_of_bounds
 
 

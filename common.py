@@ -110,7 +110,7 @@ def load_data_set(dirname):
         im = cv2.imread(fname)[:, :, 0].astype(numpy.float32) / 255.
         #code = list(fname.split("/")[1].split("_")[1])		
         index = fname.split("/")[1].split("_")[0]
-	code = label_dict[index]
+        code = label_dict[index]
         result[index] = (im, code)
     data_set[dirname] = result
     label_file.close()
