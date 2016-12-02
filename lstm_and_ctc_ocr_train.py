@@ -30,7 +30,7 @@ print("num_hidden:", num_hidden, "num_layers:", num_layers)
 #test_inputs, test_targets, test_seq_len = utils.get_data_set('test')
 #print("Data loaded....")
 
-
+input_graph_name = "input_graph.pb"
 # graph = tf.Graph()
 def report_accuracy(decoded_list, test_targets):
     original_list = decode_sparse_tensor(test_targets)
@@ -112,6 +112,7 @@ def train():
             init = tf.initialize_all_variables()
             session.run(init)
             saver = tf.train.Saver(tf.all_variables(), max_to_keep=100)
+        tf.train.write_graph(session.graph.as_graph_def(), "models", input_graph_name)
         for curr_epoch in xrange(num_epochs):
             # variables = tf.all_variables()
             # for i in variables:
